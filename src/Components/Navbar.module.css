@@ -1,0 +1,110 @@
+.navbar ul {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  list-style: none;
+  align-items: center;
+  padding: 0;
+}
+.navbar ul li a {
+  color: black;
+  text-decoration: none;
+}
+.main {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+.main input {
+  width: 400px;
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.navbar ul li a:hover {
+  color: purple;
+}
+.navbar ul li a.active {
+  font-weight: bold;
+  color: purple;
+}
+.dropdown {
+  position: relative;
+  transition: all 0.3s ease;
+}
+.dropdownContent ul {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  position: absolute;
+  left: 0;
+  padding: 30px;
+  display: none;
+  transition: all 3s ease;
+}
+.dropdown ul {
+  transition: all 3s ease;
+}
+
+.dropdown:hover .dropdownContent ul {
+  display: flex;
+}
+.dropDownIcon {
+  font-size: 30px;
+}
+.dropdown:hover .dropDownIcon {
+  transform: rotate(180deg);
+}
+.searchIcon {
+  font-size: 30px;
+  border: 1px solid #cccccca2;
+  border-radius: 8px;
+  &:hover {
+    /* background-color: teal; */
+    cursor: pointer;
+  }
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.navbarContainer {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.ResponsiveMenubar {
+  display: none;
+}
+.navbarContainerClose {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: white;
+  padding: 20px;
+  top: 15%;
+  height: 80%;
+  width: 100%;
+  align-items: center;
+}
+.navbarClose {
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (max-width: 1053px) {
+  .main input {
+    width: 200px;
+  }
+}
+
+@media screen and (max-width: 830px) {
+  .navbarContainer {
+    display: none;
+  }
+  .ResponsiveMenubar {
+    display: grid;
+    font-size: 30px;
+  }
+}
