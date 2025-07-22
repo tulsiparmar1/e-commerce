@@ -8,6 +8,35 @@
   cursor: pointer;
   background-color: rgba(128, 128, 128, 0.233);
 }
+.footer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  background-color: #f0e4d3;
+  padding: 20px;
+  gap: 20px;
+}
+.FooterIcons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 25px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.footerLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footerLinks a {
+  text-decoration: none;
+  color: black;
+  &:hover {
+    color: purple;
+    font-weight: bold;
+  }
+}
 @media screen and (max-width: 924px) {
   .slider img {
     width: 300px;

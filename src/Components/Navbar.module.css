@@ -93,6 +93,15 @@
   display: flex;
   flex-direction: column;
 }
+.navbarIcons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 20px;
+  &:hover {
+    cursor: pointer;
+  }
+}
 @media screen and (max-width: 1053px) {
   .main input {
     width: 200px;

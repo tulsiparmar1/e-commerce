@@ -5,7 +5,10 @@ import style from "./Navbar.module.css";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { IoMenu } from "react-icons/io5";
+import { BsCart2 } from "react-icons/bs";
 import { RxCross1 } from "react-icons/rx";
+import { FcLikePlaceholder } from "react-icons/fc";
+import { VscAccount } from "react-icons/vsc";
 
 function Navbar() {
   const router = useRouter();
@@ -14,7 +17,7 @@ function Navbar() {
 
   return (
     <div className={style.main}>
-      <h1>LOGO</h1>
+      <h1 style={{ color: "purple" }}>SheShine</h1>
       <div
         className={
           !isMenuOpen ? style.navbarContainer : style.navbarContainerClose
@@ -94,6 +97,12 @@ function Navbar() {
             </li>
           </ul>
         </nav>
+
+        <div className={style.navbarIcons}>
+          <BsCart2 />
+          <FcLikePlaceholder />
+          <VscAccount />
+        </div>
       </div>
       <div className={style.ResponsiveMenubar}>
         {isMenuOpen ? (
