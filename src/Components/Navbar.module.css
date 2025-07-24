@@ -32,9 +32,11 @@
 .dropdown {
   position: relative;
   transition: all 0.3s ease;
+  z-index: 123;
 }
 .dropdownContent ul {
   display: flex;
+  z-index: 132;
   flex-direction: column;
   background-color: white;
   position: absolute;

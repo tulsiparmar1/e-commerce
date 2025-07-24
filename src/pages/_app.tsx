@@ -1,8 +1,10 @@
 import Layout from "@/Components/Layout";
+import store from "@/store";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Nunito } from "next/font/google";
-
+import { Provider } from "react-redux";
+import { Toaster } from "react-hot-toast";
 const nunito = Nunito({
   subsets: ["latin"],
 });
@@ -10,9 +12,12 @@ const nunito = Nunito({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={nunito.className}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <Toaster />
+      <Provider store={store}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Provider>
     </div>
   );
 }
