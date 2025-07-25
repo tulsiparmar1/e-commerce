@@ -3,7 +3,7 @@ import { FaInstagram } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaTelegram } from "react-icons/fa";
-
+import Link from "next/link";
 function Footer() {
   return (
     <>
@@ -42,10 +42,10 @@ function Footer() {
         <div>
           <h4>Pages</h4>
           <div className="footerLinks">
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
-            <a href="/products">Products</a>
+            <Link href="/">Home</Link>
+            <Link href="/about">About</Link>
+            <Link href="/contact">Contact</Link>
+            <Link href="/shop">Shop</Link>
           </div>
         </div>
 

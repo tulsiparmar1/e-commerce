@@ -110,7 +110,6 @@ function ProductCard({ product }: { product: Product }) {
         display: "flex",
         flexDirection: "column",
       }}
-      onClick={() => router.push(`products/${product._id}`)}
     >
       <Box sx={{ padding: 2, position: "relative" }}>
         {addToCart ? (
@@ -141,6 +140,13 @@ function ProductCard({ product }: { product: Product }) {
             }}
           />
         )}
+        {product.isOnSale && (
+          <img
+            src="/save.gif"
+            alt="sale img"
+            style={{ height: "50px", position: "absolute" }}
+          />
+        )}
 
         <CardMedia
           component="img"
@@ -151,6 +157,7 @@ function ProductCard({ product }: { product: Product }) {
             borderRadius: 2,
             objectFit: "cover",
           }}
+          onClick={() => router.push(`products/${product._id}`)}
         />
 
         <CardContent sx={{ paddingX: 0 }}>
@@ -192,7 +199,8 @@ function ProductCard({ product }: { product: Product }) {
               variant="contained"
               size="small"
               sx={{ backgroundColor: "purple" }}
-              onClick={() => router.push(`/products/${product._id}`)}
+              // onClick={() => router.push(`/products/${product._id}`)}
+              onClick={() => router.push("/cart")}
             >
               Add to Cart
             </Button>
