@@ -65,14 +65,16 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import toast from "react-hot-toast";
+import ProductDetail from "@/Components/Product/ProductDetail";
 
 function ProductPage() {
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { id } = router.query;
-  console.log("id", id);
+
   useEffect(() => {
+    console.log("id from product page", id);
     const fetchProduct = async () => {
       setLoading(true);
       try {
@@ -85,15 +87,13 @@ function ProductPage() {
       }
     };
     fetchProduct();
-  }, []);
+  }, [id]);
   useEffect(() => {
     console.log("selected Producr", selectedProduct);
   }, [selectedProduct]);
   return (
     <div>
-      {/* <div>
-        <h1>{selectedProduct.name}</h1>
-      </div> */}
+      <ProductDetail product={selectedProduct}></ProductDetail>
     </div>
   );
 }

@@ -20,3 +20,78 @@
   cursor: pointer;
   background-color: rgb(66, 5, 66);
 }
+// ------------------product Detail-------------
+.productImage img {
+  height: 400px;
+  object-fit: contain;
+  width: 400px;
+}
+@media screen and (max-width: 782px) {
+  .productImage img {
+    height: 200px;
+    object-fit: contain;
+    width: 300px;
+  }
+}
+.productDetailContainer {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px 0px 20px 0px;
+}
+.actions {
+  display: flex;
+  gap: 20px;
+}
+.actions button {
+  width: 200px;
+  color: white;
+  background-color: purple;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  transition: 0.2s;
+  &:hover {
+    background-color: rgb(83, 12, 83);
+    cursor: pointer;
+  }
+}
+.size {
+  display: flex;
+  list-style-type: none;
+  padding: 3px;
+  margin: 10px;
+  font-size: 15px;
+  border-radius: 10px;
+  gap: 10px;
+  button:hover {
+    cursor: pointer;
+  }
+}
+.size li {
+  width: 15px;
+  border: 1px solid gray;
+  padding: 7px;
+  border-radius: 10px;
+  background-color: rgba(228, 221, 221, 0.219);
+  // background-color: rgb(218, 213, 213);
+}
+.colors {
+  display: flex;
+  gap: 10px;
+}
+.productDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+}
+@media screen and (max-width: 473px) {
+  .actions {
+    flex-direction: column;
+  }
+  .actions button {
+    width: 100%;
+  }
+}

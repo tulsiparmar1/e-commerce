@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     const { q } = req?.query; //this will contain simple query such as "summer kurti"
-    connectionToDatabase();
+    await connectionToDatabase();
     if (!q) return res.status(400).json({ message: "Query is required" });
 
     const keywords = q.trim().split(/\s+/); //this will contain array of each words

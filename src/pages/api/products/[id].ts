@@ -22,8 +22,11 @@ export default async function handler(
     }
   } else if (req.method === "GET") {
     try {
+      console.log("request from productdetail page");
       const { id } = req.query;
+      console.log("treq obj", req);
       const product = await Product.findById(id);
+      console.log("product", product);
       return res.status(200).json(product);
     } catch (error) {
       console.log("error", error);

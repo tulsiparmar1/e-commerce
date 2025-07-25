@@ -110,6 +110,7 @@ function ProductCard({ product }: { product: Product }) {
         display: "flex",
         flexDirection: "column",
       }}
+      onClick={() => router.push(`products/${product._id}`)}
     >
       <Box sx={{ padding: 2, position: "relative" }}>
         {addToCart ? (

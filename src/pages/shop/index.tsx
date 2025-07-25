@@ -39,6 +39,7 @@ function index() {
   }, [products]);
   return (
     <>
+      {/* -------------linear progress bar loader--------------- */}
       {/* {loading ? (
         <Box sx={{ width: "100%", height: "100vh" }}>
           <LinearProgress
