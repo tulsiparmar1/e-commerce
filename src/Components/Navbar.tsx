@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import style from "./Navbar.module.css";
-import { Button } from "@mui/material";
+import { Button, MenuItem } from "@mui/material";
 import { useRouter } from "next/router";
 import { IoMenu } from "react-icons/io5";
 import { Tooltip } from "@mui/material";
@@ -10,17 +10,53 @@ import { BsCart2 } from "react-icons/bs";
 import { RxCross1 } from "react-icons/rx";
 import { FcLikePlaceholder } from "react-icons/fc";
 import { VscAccount } from "react-icons/vsc";
+import { Badge } from "@mui/material";
+import { cartSliceActions } from "@/slices/cartSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import { Menu } from "@mui/material";
 
 function Navbar() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const encodedQuery = encodeURIComponent(searchQuery); //encode as query parameter in url (replace space with %20)
+  const { cart } = useSelector((state: RootState) => state.Cart);
+  const { data: session, status } = useSession();
   const isActive = (path: string) =>
     path === router.asPath || router.asPath.startsWith(path + "/");
   const isCategory = () =>
     router.pathname == "/categories" ||
     router.pathname.startsWith("/categories");
+  const handleSearchNavigation = () => {
+    console.log("search query", searchQuery);
+
+    if (searchQuery == "") {
+      console.log("yes search query is empty");
+      router.push("/shop");
+    } else {
+      router.push(`/search/?q=${searchQuery}`);
+    }
+  };
+
+  useEffect(() => {
+    setSearchQuery(router.query.q);
+  }, [router.query.q]);
+
+  // -----------------------------------profile------------------------
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleLogout = () => {
+    signOut();
+    setAnchorEl(null);
+  };
 
   return (
     <div className={style.main}>
@@ -36,13 +72,14 @@ function Navbar() {
             type="text"
             placeholder="search here.."
             value={searchQuery}
+            onKeyDown={(e) => e.key === "Enter" && handleSearchNavigation()}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <Button
             variant="contained"
             style={{ backgroundColor: "purple" }}
             size="small"
-            onClick={() => router.push(`/search/?q=${encodedQuery}`)} //this is query string.. encoded so
+            onClick={() => handleSearchNavigation} //this is query string.. encoded so
             // that spaces and special character works
           >
             Search
@@ -139,15 +176,47 @@ function Navbar() {
         </nav>
 
         <div className={style.navbarIcons}>
+          <Badge badgeContent={cart.length} color="primary">
+            <Tooltip title="Add to cart">
+              <BsCart2 onClick={() => router.push("/addtocart")} />
+              {/* <BsCart2 onClick={() => } /> */}
+            </Tooltip>
+          </Badge>
           <Tooltip title="wishlist">
-            <BsCart2 onClick={() => router.push("/wishlist")} />
-          </Tooltip>
-          <Tooltip title="Add to cart">
-            <FcLikePlaceholder onClick={() => router.push("/addtocart")} />
+            <FcLikePlaceholder onClick={() => router.push("/wishlist")} />
           </Tooltip>
           <Tooltip title="profile">
-            <VscAccount onClick={() => router.push("/profile")} />
+            {/* <VscAccount onClick={() => router.push("/profile")} /> */}
+            <VscAccount
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+            />
           </Tooltip>
+          {/* --------------------------------Profile------------------------------------ */}
+
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            slotProps={{
+              list: {
+                "aria-labelledby": "basic-button",
+              },
+            }}
+          >
+            <MenuItem onClick={() => router.push("/profile")}>Profile</MenuItem>
+            {status === "unauthenticated" ? (
+              <MenuItem onClick={() => router.push("/login")}>Login</MenuItem>
+            ) : (
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            )}
+          </Menu>
+          {/* <button onClick={() => router.push("/register")}>Register</button> */}
+          {/* <button onClick={() => router.push("/login")}>Login</button> */}
         </div>
       </div>
       <div className={style.ResponsiveMenubar}>

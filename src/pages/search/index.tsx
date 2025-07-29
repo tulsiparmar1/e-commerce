@@ -2,7 +2,7 @@ import ProductCard from "@/Components/Product/ProductCard";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { Skeleton } from "@mui/material";
+import { selectClasses, Skeleton } from "@mui/material";
 
 function search() {
   const router = useRouter();
@@ -31,9 +31,10 @@ function search() {
     };
     searchResult();
   }, [q]);
+
   return (
     <div>
-      <div style={{ display: "flex", gap: "16px", margin: "20px" }}>
+      {/* <div style={{ display: "flex", gap: "16px", margin: "20px" }}>
         {matchedItems.map((item) =>
           loading ? (
             <Skeleton
@@ -42,9 +43,37 @@ function search() {
               width={300}
               height={400}
             />
-          ) : (
+          ) : matchedItems.length > 0 ? (
             <ProductCard product={item}></ProductCard>
+          ) : (
+            <p>no result found</p>
           )
+        )}
+      </div> */}
+      <div
+        style={{
+          display: "flex",
+          gap: "16px",
+          margin: "20px",
+          flexWrap: "wrap",
+        }}
+      >
+        {loading ? (
+          Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton
+              key={index}
+              sx={{ bgcolor: "grey.1000", borderRadius: "10px" }}
+              variant="rectangular"
+              width={300}
+              height={400}
+            />
+          ))
+        ) : matchedItems.length > 0 ? (
+          matchedItems.map((item) => (
+            <ProductCard key={item._id} product={item} />
+          ))
+        ) : (
+          <p>No results found for {q}</p>
         )}
       </div>
     </div>

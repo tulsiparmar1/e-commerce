@@ -95,3 +95,11 @@
     width: 100%;
   }
 }
+@media screen and (max-width: 905px) {
+  .skeletonStyle {
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+}

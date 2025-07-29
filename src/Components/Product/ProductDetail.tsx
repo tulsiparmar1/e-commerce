@@ -4,15 +4,18 @@ import style from "../Product/Product.module.scss";
 import Image from "next/image";
 import { Skeleton, Tooltip } from "@mui/material";
 import { Box } from "@mui/material";
+import { cartSliceActions } from "@/slices/cartSlice";
+import { useDispatch, UseDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 function ProductDetail({ product }: { product: Product }) {
   const allSizes = ["S", "M", "XL", "XXl", "XXXl"];
   const [selectedSize, setSelectedSize] = useState();
   const [selectedColor, setSelectedColor] = useState();
   const [count, setCount] = useState(1);
-  useEffect(() => {
-    console.log("product", product);
-  }, []);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const handleCountDecrement = () => {
     if (count <= 1) {
       setCount(1);
@@ -26,7 +29,15 @@ function ProductDetail({ product }: { product: Product }) {
     }
     setCount((count) => count + 1);
   };
-  const handleBuyNow = () => {};
+
+  const handleBuyNow = () => {
+    product.selectedSize = selectedSize;
+    product.selectedColor = selectedColor;
+    product.quantity = count;
+    console.log("updated Product", product);
+    router.push("/buynow");
+  };
+  useEffect(() => {});
   return (
     <div>
       {product.sizes ? (
@@ -125,17 +136,21 @@ function ProductDetail({ product }: { product: Product }) {
               </div>
               <div className={style.actions}>
                 <button onClick={handleBuyNow}>Buy Now</button>
-                <button>Add to cart</button>
+                <button
+                  onClick={() => dispatch(cartSliceActions.addToCart(product))}
+                >
+                  add to cart
+                </button>
               </div>
             </div>
           </div>
         </div>
       ) : (
         <div
+          className={style.skeletonStyle}
           style={{
             display: "flex",
             justifyContent: "center",
-
             marginTop: "40px",
             gap: "40px",
           }}
