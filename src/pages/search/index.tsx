@@ -7,7 +7,6 @@ import { selectClasses, Skeleton } from "@mui/material";
 function search() {
   const router = useRouter();
   const [matchedItems, setMatchedItems] = useState([]);
-
   const [loading, setLoading] = useState(false);
   const { q } = router?.query; //extract the query
   console.log("1q", q); //this contain your searh result for example "summer kurti"

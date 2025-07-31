@@ -44,7 +44,6 @@ import connectionToDatabase from "../../../../utils/mongodb.ts";
 export default NextAuth({
   providers: [
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
@@ -61,7 +60,11 @@ export default NextAuth({
         }
         const isValid = await compare(password, user.password);
         if (isValid) {
-          return { id: user._id, name: user.name, email: user.email }; //returns if user is found and password is matched
+          return {
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email,
+          }; //returns if user is found and password is matched
         } else {
           console.log("password doesn't match");
         }
@@ -84,7 +87,7 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user._id;
+        token.id = user.id; //this user.id is returned from authorized function
       }
       return token;
     },

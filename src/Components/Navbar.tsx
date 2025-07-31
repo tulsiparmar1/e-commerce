@@ -12,17 +12,21 @@ import { FcLikePlaceholder } from "react-icons/fc";
 import { VscAccount } from "react-icons/vsc";
 import { Badge } from "@mui/material";
 import { cartSliceActions } from "@/slices/cartSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useSession } from "next-auth/react";
+import { UseDispatch } from "react-redux";
 import { signOut } from "next-auth/react";
 import { Menu } from "@mui/material";
+import axios from "axios";
+import { addItemToGuestCart, getGuestCard } from "../../utils/cartStorage";
 
 function Navbar() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { cart } = useSelector((state: RootState) => state.Cart);
+  const dispatch = useDispatch();
   const { data: session, status } = useSession();
   const isActive = (path: string) =>
     path === router.asPath || router.asPath.startsWith(path + "/");
@@ -31,7 +35,6 @@ function Navbar() {
     router.pathname.startsWith("/categories");
   const handleSearchNavigation = () => {
     console.log("search query", searchQuery);
-
     if (searchQuery == "") {
       console.log("yes search query is empty");
       router.push("/shop");
@@ -44,7 +47,7 @@ function Navbar() {
     setSearchQuery(router.query.q);
   }, [router.query.q]);
 
-  // -----------------------------------profile------------------------
+  // ------------------------------profile(options)-------------------------------------
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -57,6 +60,35 @@ function Navbar() {
     signOut();
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      if (session?.user.id) {
+        console.log("authorixsed");
+        try {
+          console.log("data fetched", session?.user?.id);
+          const { data } = await axios.post("/api/cart/cartitems", {
+            userId: session?.user?.id,
+          });
+          console.log("data from navbar component", data.total);
+          dispatch(cartSliceActions.addToCart(data.total));
+        } catch (error) {
+          console.log(
+            "error from navbar component while fetching cart items count",
+            error
+          );
+        }
+      } else {
+        const getGuestcard = getGuestCard();
+        const totalItems = getGuestcard.reduce(
+          (acc, item) => acc + item.quantity,
+          0
+        );
+        dispatch(cartSliceActions.addToCart(totalItems));
+      }
+    };
+    fetchCartCount();
+  }, [session, cart]);
 
   return (
     <div className={style.main}>
@@ -104,7 +136,7 @@ function Navbar() {
               >
                 Shop
               </Link>
-              {/* -------Contact Drop down--------------------- */}
+              {/* --------------------Contact Drop down--------------------- */}
             </li>
             <div className={style.dropdown} style={{ zIndex: "399" }}>
               <li style={{ display: "flex", alignItems: "center" }}>
@@ -176,7 +208,7 @@ function Navbar() {
         </nav>
 
         <div className={style.navbarIcons}>
-          <Badge badgeContent={cart.length} color="primary">
+          <Badge badgeContent={cart} color="primary">
             <Tooltip title="Add to cart">
               <BsCart2 onClick={() => router.push("/addtocart")} />
               {/* <BsCart2 onClick={() => } /> */}
@@ -196,7 +228,6 @@ function Navbar() {
             />
           </Tooltip>
           {/* --------------------------------Profile------------------------------------ */}
-
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}

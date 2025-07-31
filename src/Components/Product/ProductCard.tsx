@@ -199,10 +199,9 @@ function ProductCard({ product }: { product: Product }) {
               variant="contained"
               size="small"
               sx={{ backgroundColor: "purple" }}
-              // onClick={() => router.push(`/products/${product._id}`)}
-              onClick={() => router.push("/cart")}
+              onClick={() => router.push("/buynow")}
             >
-              Add to Cart
+              buy now
             </Button>
           </Stack>
         </CardContent>

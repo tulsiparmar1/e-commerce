@@ -7,13 +7,19 @@ import { Box } from "@mui/material";
 import { cartSliceActions } from "@/slices/cartSlice";
 import { useDispatch, UseDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import { addItemToGuestCart, getGuestCard } from "../../../utils/cartStorage";
 
 function ProductDetail({ product }: { product: Product }) {
   const allSizes = ["S", "M", "XL", "XXl", "XXXl"];
+  const { data: session, status } = useSession();
   const [selectedSize, setSelectedSize] = useState();
   const [selectedColor, setSelectedColor] = useState();
   const [count, setCount] = useState(1);
   const router = useRouter();
+
   const dispatch = useDispatch();
 
   const handleCountDecrement = () => {
@@ -37,7 +43,37 @@ function ProductDetail({ product }: { product: Product }) {
     console.log("updated Product", product);
     router.push("/buynow");
   };
-  useEffect(() => {});
+
+  const handleAddToCart = async () => {
+    const newItem = {
+      productId: product._id,
+      userId: session?.user?.id,
+      size: selectedSize,
+      color: selectedColor,
+      quantity: count,
+    };
+    if (session?.user.id) {
+      try {
+        console.log("sessionID", session?.user?.name, session?.user?.id);
+        const { data } = await axios.post("/api/cart/add", newItem);
+        // console.log("data", data);
+        toast.success(data.message);
+        const total = data.cart.items.reduce(
+          (acc, item) => acc + item.quantity,
+          0
+        );
+        dispatch(cartSliceActions.addToCart(total));
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      addItemToGuestCart(newItem);
+      const getTotal = getGuestCard();
+      const total = getTotal.reduce((acc, item) => acc + item.quantity, 0);
+      dispatch(cartSliceActions.addToCart(total));
+    }
+  };
+
   return (
     <div>
       {product.sizes ? (
@@ -136,11 +172,12 @@ function ProductDetail({ product }: { product: Product }) {
               </div>
               <div className={style.actions}>
                 <button onClick={handleBuyNow}>Buy Now</button>
-                <button
+                {/* <button
                   onClick={() => dispatch(cartSliceActions.addToCart(product))}
                 >
                   add to cart
-                </button>
+                </button> */}
+                <button onClick={handleAddToCart}>add to cart</button>
               </div>
             </div>
           </div>

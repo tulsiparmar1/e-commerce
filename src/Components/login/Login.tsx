@@ -39,6 +39,7 @@ function Login() {
   const onsubmit = async (data: UserType) => {
     setLoading(true);
     const { email, password } = data;
+    //--------------next auth authentication-------------------
     const res = await signIn("credentials", {
       redirect: false,
       email,
