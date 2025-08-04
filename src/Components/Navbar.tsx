@@ -64,7 +64,7 @@ function Navbar() {
   useEffect(() => {
     const fetchCartCount = async () => {
       if (session?.user.id) {
-        console.log("authorixsed");
+        console.log("authorizsed");
         try {
           console.log("data fetched", session?.user?.id);
           const { data } = await axios.post("/api/cart/cartitems", {

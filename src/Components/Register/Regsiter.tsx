@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { UserType } from "@/types/UserType";
 import { CircularProgress } from "@mui/material";
 import Router, { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 
 function Register() {
   const [loading, setLoading] = useState(false);
@@ -40,7 +41,16 @@ function Register() {
     try {
       const res = await axios.post("/api/register", data);
       toast.success(res.data.message);
-      reset();
+
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
+      if (result.ok) {
+        router.push("/");
+        reset();
+      }
     } catch (error) {
       console.log("error", error);
       toast.error(error.response.data.message);
@@ -51,6 +61,7 @@ function Register() {
 
   return (
     <div className={style.registerContainer}>
+      <h1>Register</h1>
       <form className={style.register} onSubmit={handleSubmit(onsubmit)}>
         <div>
           Name:{" "}

@@ -5,48 +5,12 @@ import { Provider } from "react-redux";
 import NextAuth from "next-auth";
 import connectionToDatabase from "../../../../utils/mongodb.ts";
 
-// export default NextAuth({
-//   providers: [
-//     CredentialsProvider({
-//       name: "Credentials",
-//       credentials: {
-//         email: { label: "Email", type: "email" },
-//         password: { label: "Password", type: "password" },
-//       },
-//       async authorize(credentials) {
-//         await connectionToDatabase();
-
-//         const user = await User.findOne({ email: credentials.email });
-//         if (!user) throw new Error("No user found");
-
-//         const isValid = await compare(credentials.password, user.password);
-//         if (!isValid) throw new Error("Invalid password");
-
-//         return { id: user._id, email: user.email, name: user.name };
-//       },
-//     }),
-//   ],
-//   session: {
-//     strategy: "jwt",
-//   },
-//   callbacks: {
-//     async jwt({ token, user }) {
-//       if (user) token.id = user.id;
-//       return token;
-//     },
-//     async session({ session, token }) {
-//       session.user.id = token.id;
-//       return session;
-//     },
-//   },
-//   secret: process.env.NEXTAUTH_SECRET,
-// });
-export default NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
@@ -93,8 +57,47 @@ export default NextAuth({
     },
     //when client request session data using useSession than this runs..
     async session({ session, token }) {
-      session.user.id = token.id;
+      if (token?.id) {
+        session.user.id = token.id;
+      }
       return session;
     },
   },
-});
+};
+// export default NextAuth({
+//   providers: [
+//     CredentialsProvider({
+//       name: "Credentials",
+//       credentials: {
+//         email: { label: "Email", type: "email" },
+//         password: { label: "Password", type: "password" },
+//       },
+//       async authorize(credentials) {
+//         await connectionToDatabase();
+
+//         const user = await User.findOne({ email: credentials.email });
+//         if (!user) throw new Error("No user found");
+
+//         const isValid = await compare(credentials.password, user.password);
+//         if (!isValid) throw new Error("Invalid password");
+
+//         return { id: user._id, email: user.email, name: user.name };
+//       },
+//     }),
+//   ],
+//   session: {
+//     strategy: "jwt",
+//   },
+//   callbacks: {
+//     async jwt({ token, user }) {
+//       if (user) token.id = user.id;
+//       return token;
+//     },
+//     async session({ session, token }) {
+//       session.user.id = token.id;
+//       return session;
+//     },
+//   },
+//   secret: process.env.NEXTAUTH_SECRET,
+// });
+export default NextAuth(authOptions);

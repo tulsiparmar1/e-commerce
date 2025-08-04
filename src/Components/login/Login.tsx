@@ -5,7 +5,7 @@ import style from "./Login.module.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { UserType } from "@/types/UserType";
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
@@ -14,12 +14,12 @@ import { Button } from "@mui/material";
 function Login() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { data: session, status } = useSession();
   const schema = yup.object().shape({
     email: yup
       .string()
       .required("email is required")
       .matches(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, "email must be in format"),
-
     password: yup
       .string()
       .required("password is required")
@@ -47,25 +47,19 @@ function Login() {
     });
     if (res?.error) {
       console.log(res.error);
+      toast.error("email or password is incorrect");
+      setLoading(false);
     } else {
+      toast.success("loggedin Successfully!");
       console.log("authorized", res);
       router.push("/");
+      setLoading(false);
     }
   };
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       console.log("hey");
-  //       const res = await axios.get("/api/register");
-  //       console.log("console", res.data);
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+
   return (
     <div className={style.loginContainer}>
+      <h1>Login Page</h1>
       <form className={style.login} onSubmit={handleSubmit(onsubmit)}>
         <label htmlFor="">
           Email:

@@ -1,0 +1,6 @@
+.main {
+  margin-top: 20px;
+  border: 1px solid rgba(128, 128, 128, 0.192);
+  padding: 30px;
+  flex-wrap: wrap;
+}

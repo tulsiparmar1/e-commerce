@@ -5,7 +5,7 @@ export const getGuestCard = (): any[] => {
 
 export const saveGuestCart = (cart: any[]) => {
   localStorage.setItem("guestCart", JSON.stringify(cart));
-  const total = cart.reduce((acc, item) => acc + item.quantity, 0);
+  // const total = cart.reduce((acc, item) => acc + item.quantity, 0);
 };
 export const addItemToGuestCart = (newItem: any) => {
   const cart = getGuestCard();
@@ -20,6 +20,5 @@ export const addItemToGuestCart = (newItem: any) => {
   } else {
     cart.push(newItem);
   }
-
   saveGuestCart(cart);
 };

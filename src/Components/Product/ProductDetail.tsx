@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { addItemToGuestCart, getGuestCard } from "../../../utils/cartStorage";
 
 function ProductDetail({ product }: { product: Product }) {
   const allSizes = ["S", "M", "XL", "XXl", "XXXl"];
@@ -19,6 +18,7 @@ function ProductDetail({ product }: { product: Product }) {
   const [selectedColor, setSelectedColor] = useState();
   const [count, setCount] = useState(1);
   const router = useRouter();
+  console.log("product from productDetail page", product);
 
   const dispatch = useDispatch();
 
@@ -44,36 +44,61 @@ function ProductDetail({ product }: { product: Product }) {
     router.push("/buynow");
   };
 
+  // const handleAddToCart = async () => {
+  //   const newItem = {
+  //     productId: product._id,
+  //     userId: session?.user?.id,
+  //     size: selectedSize,
+  //     color: selectedColor,
+  //     quantity: count,
+  //   };
+  //   if (session?.user.id) {
+  //     try {
+  //       console.log("sessionID", session?.user?.name, session?.user?.id);
+  //       const { data } = await axios.post("/api/cart/add", newItem);
+  //       // console.log("data", data);
+  //       toast.success(data.message);
+  //       const total = data.cart.items.reduce(
+  //         (acc, item) => acc + item.quantity,
+  //         0
+  //       );
+  //       dispatch(cartSliceActions.addToCart(total));
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   } else {
+  //     addItemToGuestCart(newItem);
+  //     const getTotal = getGuestCard();
+  //     const total = getTotal.reduce((acc, item) => acc + item.quantity, 0);
+  //     dispatch(cartSliceActions.addToCart(total));
+  //   }
+  // };
   const handleAddToCart = async () => {
-    const newItem = {
-      productId: product._id,
-      userId: session?.user?.id,
-      size: selectedSize,
-      color: selectedColor,
-      quantity: count,
-    };
+    console.log("add to cart ", session?.user.id);
+
     if (session?.user.id) {
+      // console.log("new Item", newItem);
+      const newItem = {
+        productId: product._id,
+        userId: session?.user?.id,
+        size: selectedSize,
+        color: selectedColor,
+        quantity: count,
+      };
+      console.log("new Item", newItem);
       try {
-        console.log("sessionID", session?.user?.name, session?.user?.id);
         const { data } = await axios.post("/api/cart/add", newItem);
-        // console.log("data", data);
-        toast.success(data.message);
-        const total = data.cart.items.reduce(
-          (acc, item) => acc + item.quantity,
-          0
-        );
+        console.log("data from product detail", data);
+        const total = data.cart.items.reduce((acc, item) => acc + item, 0);
         dispatch(cartSliceActions.addToCart(total));
       } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.message);
+        console.log("error", error);
       }
     } else {
-      addItemToGuestCart(newItem);
-      const getTotal = getGuestCard();
-      const total = getTotal.reduce((acc, item) => acc + item.quantity, 0);
-      dispatch(cartSliceActions.addToCart(total));
+      router.push("/login");
     }
   };
-
   return (
     <div>
       {product.sizes ? (
@@ -82,7 +107,7 @@ function ProductDetail({ product }: { product: Product }) {
             {product.images && (
               <Image
                 src={`/${product?.images?.[0]?.url}`} //chnage this '/' once you store your images in cloudinary or any other platform
-                alt={product.images[0].alt}
+                alt={product?.images?.[0].alt}
                 height={300}
                 width={300}
               />
