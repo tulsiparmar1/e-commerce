@@ -1,6 +1,21 @@
-.main {
+.orderMain {
   margin-top: 20px;
   border: 1px solid rgba(128, 128, 128, 0.192);
   padding: 30px;
   flex-wrap: wrap;
+  width: 30%;
+}
+.cartItems {
+  width: 40%;
+}
+@media screen and (max-width: 721px) {
+  .mainContainer {
+    flex-direction: column-reverse;
+  }
+  .cartItems {
+    width: 100%;
+  }
+  .orderMain {
+    width: 80%;
+  }
 }

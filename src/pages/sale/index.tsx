@@ -23,7 +23,14 @@ function index() {
     fetchSaleProducts();
   }, []);
   return (
-    <div style={{ display: "flex", gap: "16px", margin: "20px" }}>
+    <div
+      style={{
+        display: "flex",
+        gap: "16px",
+        margin: "20px",
+        flexDirection: "column",
+      }}
+    >
       {onSaleProduct.map((item) =>
         loading ? (
           <Skeleton
